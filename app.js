@@ -8,6 +8,8 @@ const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
 const coolRouter = require('./routes/cool');
 
+const mongoose = require('mongoose')
+
 const app = express();
 
 // view engine setup
@@ -39,5 +41,22 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
+
+
+// connect to mongoDB
+const connectToDB = async() => {
+  try{
+    await mongoose.connect("mongodb://localhost:27017/mydatabase", {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    })
+    console.log("Connected to MongoDB")
+  }catch(err){
+    console.log(err)
+    process.exit(1)
+  }
+}
+
+connectToDB()
 
 module.exports = app;
