@@ -2,30 +2,32 @@ const mongoose = require("mongoose")
 
 const contactSchema = new mongoose.Schema({
   firstName: {
-    Type:String,
-    require: [true, "First name is require"],
+    type:String,
+    required: [true, "First name is require"],
     minLength: 3,
     maxLength: 20,
     trim: true,
     validate: {
       validator: (value) => {
-        const nameRegex = /^[a-zA-z\s]*$/
+        const nameRegex = /^[a-zA-Z\s]*$/;
         return nameRegex.test(value)
       },
       message: "First name must container only alphabetic chars"
     }
   },
   lastName: {
-    Type:String,
-    require: true,
+    type:String,
+    required: true,
   },
   emailAddress: {
-    Type:String,
-    require: true,
+    type:String,
+    required: true,
     unique: true,
   },
   age: {
-    Type:Number,
-    require: false,
+    type:Number,
+    required: false,
   }
 })
+
+module.exports = mongoose.model("Contact",contactSchema)
