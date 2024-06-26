@@ -38,4 +38,23 @@ router.get("/post", async (req, res) => {
   }
 });
 
+// Read func - Read Single Data
+router.get("/post/:id", async (req, res) => {
+  try {
+    const id = req.params.id
+    Contact.findById(id)
+      .then((contact) => {
+        console.log(contact);
+        res.status(200).json({ contact: contact });
+      })
+      .catch((err) => {
+        console.log(err);
+        res.status(500).json({ msg: "read error 3" });
+      });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ msg: "read error 4" });
+  }
+});
+
 module.exports = router;
