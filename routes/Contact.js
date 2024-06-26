@@ -41,7 +41,7 @@ router.get("/post", async (req, res) => {
 // Read func - Read Single Data
 router.get("/post/:id", async (req, res) => {
   try {
-    const id = req.params.id
+    const id = req.params.id;
     Contact.findById(id)
       .then((contact) => {
         console.log(contact);
@@ -54,6 +54,28 @@ router.get("/post/:id", async (req, res) => {
   } catch (err) {
     console.log(err);
     res.status(500).json({ msg: "read error 4" });
+  }
+});
+
+//search func
+router.get("/search", async (req, res) => {
+  try {
+    const searchTerm = req.query.searchTerm;
+    const searchRegex = new RegExp(searchTerm, "i");
+
+    const contacts = await Contact.find({
+      $or: [
+        { firstName: searchRegex },
+        { lastName: searchRegex },
+        { emailAddress: searchRegex },
+      ],
+    });
+
+    console.log(contacts);
+    res.status(200).json({ contacts: contacts });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ msg: "Error searching contacts" });
   }
 });
 
