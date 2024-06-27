@@ -71,12 +71,38 @@ router.get("/search", async (req, res) => {
       ],
     });
 
-    console.log(contacts);
-    res.status(200).json({ contacts: contacts });
+    if (contacts.length) {
+      // console.log(contacts);
+      res.status(200).json({ contacts: contacts });
+    } else {
+      res.status(200).json({ contacts: [], msg: "no match records find" });
+    }
   } catch (err) {
     console.log(err);
     res.status(500).json({ msg: "Error searching contacts" });
   }
 });
+
+// Update contact by ID
+router.put('/post/:id', async (req, res) => {
+  try {
+    const id = req.params.id;
+    const updateContact = req.body;
+    
+    const updatedContact = await Contact.findByIdAndUpdate(id, updateContact, { new: true });
+
+    if (updatedContact) {
+      console.log(updatedContact);
+      res.status(202).json({ msg: "Update successful", contact: updatedContact });
+    } else {
+      res.status(404).json({ msg: "Contact not found" });
+    }
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ msg: "Error updating contact" });
+  }
+});
+
+
 
 module.exports = router;
