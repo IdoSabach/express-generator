@@ -84,16 +84,20 @@ router.get("/search", async (req, res) => {
 });
 
 // Update contact by ID
-router.put('/post/:id', async (req, res) => {
+router.put("/post/:id", async (req, res) => {
   try {
     const id = req.params.id;
     const updateContact = req.body;
-    
-    const updatedContact = await Contact.findByIdAndUpdate(id, updateContact, { new: true });
+
+    const updatedContact = await Contact.findByIdAndUpdate(id, updateContact, {
+      new: true,
+    });
 
     if (updatedContact) {
       console.log(updatedContact);
-      res.status(202).json({ msg: "Update successful", contact: updatedContact });
+      res
+        .status(202)
+        .json({ msg: "Update successful", contact: updatedContact });
     } else {
       res.status(404).json({ msg: "Contact not found" });
     }
@@ -103,6 +107,25 @@ router.put('/post/:id', async (req, res) => {
   }
 });
 
-
+//delete
+router.delete("/delete/:id", async (req, res) => {
+  try {
+    const id = req.params.id;
+    await Contact.findByIdAndDelete(id)
+      .then((deletedContact) => {
+        console.log(deletedContact);
+        res
+          .status(200)
+          .json({ msg: "successfully", contacts: deletedContact });
+      })
+      .catch((err) => {
+        console.log(err);
+        res.status(500).json({ msg: "Error delete contact 1" });
+      });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ msg: "Error delete contact 2" });
+  }
+});
 
 module.exports = router;
